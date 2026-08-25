@@ -4,7 +4,7 @@
 
 ## Lab Environment
 
-[Network diagram]
+<img width="1536" height="1024" alt="ChatGPT Image Aug 25, 2026 at 02_48_57 PM" src="https://github.com/user-attachments/assets/844bea16-ce6d-40bb-83bb-4047e542dbc5" />
 
 ### Systems
 - Ubuntu Server — Wazuh SIEM
