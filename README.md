@@ -30,7 +30,7 @@ The installation was initiated using:
 
 sudo bash ./wazuh-install.sh -a
 
-<img width="1301" height="955" alt="Wazuh" src="https://github.com/user-attachments/assets/44c98517-00c3-4a61-931e-d93ca7efb9a4" />
+<img width="500" height="364" alt="Wazuh" src="https://github.com/user-attachments/assets/44c98517-00c3-4a61-931e-d93ca7efb9a4" />
 
 ## Agent Deployment
 
