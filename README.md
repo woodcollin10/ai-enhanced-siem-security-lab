@@ -2,9 +2,7 @@
 
 ## Overview 
 
-## Lab Environment
-
-<img width="1254" height="879" alt="Network Diagram" src="https://github.com/user-attachments/assets/844bea16-ce6d-40bb-83bb-4047e542dbc5" />
+<img width="1000" height="698" alt="Network Diagram" src="https://github.com/user-attachments/assets/844bea16-ce6d-40bb-83bb-4047e542dbc5" />
 
 ### Systems
 - Ubuntu Server — Wazuh SIEM
