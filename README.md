@@ -35,159 +35,91 @@ sudo bash ./wazuh-install.sh -a
 
 ### Installation Troubleshooting
 
-The initial Wazuh installation encountered several issues that required troubleshooting before the deployment could be completed.
+The initial Wazuh deployment encountered a storage issue that resulted in an incomplete installation. The installation process had already placed some Wazuh components on the Ubuntu Server before the available disk space was exhausted. This required troubleshooting the storage issue, cleaning up the incomplete installation, and performing a fresh installation.
 
-#### 1. Existing Wazuh Installation
+#### 1. Insufficient Storage
 
-The installation assistant initially reported that Wazuh Manager was already installed:
+The first issue encountered during the Wazuh installation was insufficient disk space on the Ubuntu Server.
 
-```text
-ERROR: Wazuh manager already installed.
+Disk usage was checked using:
+
+```bash
+df -h
 ```
 
-To determine whether the Wazuh Manager package was still installed, the following command was used:
+The output showed that the available storage was insufficient for the Wazuh installation to complete successfully.
+
+Because Wazuh had already installed some components before the storage was exhausted, simply rerunning the installation was not enough. The partially installed components needed to be cleaned up before attempting a fresh installation.
+
+#### 2. Cleaning Up the Incomplete Installation
+
+The existing Wazuh installation and related files were investigated to determine what had already been installed.
+
+Installed Wazuh packages were checked using:
 
 ```bash
 dpkg -l | grep wazuh
 ```
 
-The output showed that `wazuh-manager` version `4.14.7-1` was installed.
+The system was also checked for Wazuh processes and services that may have remained active from the incomplete installation.
 
-#### 2. Port Conflicts
+The goal was to completely remove the partially installed Wazuh components so that the installation could be restarted from a clean state.
 
-The installation assistant then reported that ports `1515` and `55000` were already being used by other processes:
+#### 3. Resolving the Storage Issue
 
-```text
-ERROR: Port 1515 is being used by another process.
-ERROR: Port 55000 is being used by another process.
-```
+The Ubuntu Server was cleaned up to provide sufficient storage for the complete Wazuh deployment.
 
-The processes using these ports were identified with:
+Disk usage was verified again using:
 
 ```bash
-sudo ss -ltnp | grep -E ':1515|:55000'
+df -h
 ```
 
-The output showed that existing Wazuh processes were listening on the affected ports.
+Once sufficient storage was available, the remaining Wazuh installation components and processes from the failed installation were removed.
 
-The associated process IDs were identified with:
+#### 4. Cleaning Up Wazuh Services and Packages
 
-```bash
-ps -fp 53616 53583
-```
+The system was checked for existing Wazuh services and packages before proceeding with the reinstall.
 
-The processes were then stopped:
-
-```bash
-sudo kill 53583 53616
-```
-
-The ports were checked again to verify that the processes were no longer listening:
-
-```bash
-sudo ss -ltnp | grep -E ':1515|:55000'
-```
-
-#### 3. Wazuh Package Removal Failure
-
-After stopping the existing processes, an attempt was made to remove the existing Wazuh Manager installation:
-
-```bash
-sudo apt remove --purge wazuh-manager -y
-```
-
-The removal initially failed because the Wazuh package's post-removal script attempted to access a directory that no longer existed:
-
-```text
-find: '/var/ossec/api/': No such file or directory
-```
-
-The package's removal script was inspected to determine what was causing the failure.
-
-A backup of the original post-removal script was created:
-
-```bash
-sudo cp /var/lib/dpkg/info/wazuh-manager.postrm /var/lib/dpkg/info/wazuh-manager.postrm.bak
-```
-
-The problematic command was then modified so that the package could be removed without attempting to access the missing Wazuh directory:
-
-```bash
-sudo sed -i '/wazuh-control stop/c\ true' /var/lib/dpkg/info/wazuh-manager.postrm
-```
-
-The package removal was attempted again.
-
-#### 4. Forcefully Purging the Wazuh Package
-
-The Wazuh Manager package was still registered with the system even after the previous removal attempt. The package was therefore forcefully purged:
-
-```bash
-sudo dpkg --purge --force-all wazuh-manager
-```
-
-The output confirmed that the Wazuh Manager package was removed:
-
-```text
-Removing wazuh-manager (4.14.7-1) ...
-Purging configuration files for wazuh-manager (4.14.7-1) ...
-```
-
-A warning indicated that `/var/ossec` was not completely removed because the directory was not empty. The remaining directory contents were checked:
-
-```bash
-sudo ls -la /var/ossec
-```
-
-The directory contained only the remaining `etc` directory.
-
-#### 5. Verifying the Previous Installation Was Removed
-
-The system was checked again for remaining Wazuh packages:
-
-```bash
-dpkg -l | grep wazuh
-```
-
-The system was also checked for processes using the Wazuh ports:
-
-```bash
-sudo ss -ltnp | grep -E ':1515|:55000'
-```
-
-These checks were used to confirm that the previous Wazuh Manager installation and associated processes had been removed.
-
-#### 6. Reattempting the Installation
-
-After the previous installation was removed and the port conflicts were resolved, the Wazuh installation assistant was run again:
-
-```bash
-sudo bash ./wazuh-install.sh -a
-```
-
-The installation completed successfully and the Wazuh web interface became available.
-
-#### 7. Verifying Wazuh Services
-
-After installation, the Wazuh Manager service was checked:
+Wazuh services were examined using:
 
 ```bash
 sudo systemctl status wazuh-manager
 ```
 
-The service reported:
+Existing Wazuh processes and network ports were also checked to ensure that the incomplete installation was no longer actively running.
 
-```text
-Active: active (running)
+Ports commonly used by the Wazuh Manager, including `1515` and `55000`, were checked using:
+
+```bash
+sudo ss -ltnp | grep -E ':1515|:55000'
 ```
 
-The Wazuh Indexer and Wazuh Dashboard were also verified:
+Any remaining Wazuh processes associated with the incomplete installation were stopped and the existing Wazuh Manager package was removed.
+
+#### 5. Fresh Wazuh Installation
+
+After resolving the storage problem and cleaning up the incomplete installation, the Wazuh installation was started again from a clean state.
+
+The all-in-one installation was performed using:
+
+```bash
+sudo bash ./wazuh-install.sh -a
+```
+
+This time, the installation completed successfully.
+
+#### 6. Verifying the Installation
+
+After the installation completed, the Wazuh services were checked to confirm that the deployment was operational:
 
 ```bash
 sudo systemctl is-active wazuh-manager wazuh-indexer wazuh-dashboard
 ```
 
-The services returned an active status, confirming that the Wazuh environment was operational.
+The services returned an `active` status, confirming that the Wazuh Manager, Indexer, and Dashboard were successfully running.
+
+The Wazuh Dashboard was then accessed through a web browser, confirming that the installation was functioning correctly.
 
 ## Agent Deployment
 
