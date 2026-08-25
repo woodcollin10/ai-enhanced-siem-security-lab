@@ -26,11 +26,6 @@ Wazuh was deployed on an Ubuntu Server virtual machine to serve as the centraliz
 
 The Wazuh installation assistant was used to deploy the Wazuh Manager, Wazuh Indexer, and Wazuh Dashboard components.
 
-The installation was initiated using:
-
-```bash
-sudo bash ./wazuh-install.sh -a
-```
 <img width="800" height="564" alt="Wazuh" src="https://github.com/user-attachments/assets/44c98517-00c3-4a61-931e-d93ca7efb9a4" />
 
 ### Installation Troubleshooting
