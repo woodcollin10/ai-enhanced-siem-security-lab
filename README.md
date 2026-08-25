@@ -28,9 +28,8 @@ The Wazuh installation assistant was used to deploy the Wazuh Manager, Wazuh Ind
 
 The installation was initiated using:
 
-```bash
 sudo bash ./wazuh-install.sh -a
-'''
+
 <img width="1301" height="955" alt="Wazuh" src="https://github.com/user-attachments/assets/44c98517-00c3-4a61-931e-d93ca7efb9a4" />
 
 ## Agent Deployment
