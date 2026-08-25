@@ -22,7 +22,16 @@
 
 ## Wazuh Deployment
 
-[Installation and configuration documentation]
+Wazuh was deployed on an Ubuntu Server virtual machine to serve as the centralized SIEM and security monitoring platform for the lab environment.
+
+The Wazuh installation assistant was used to deploy the Wazuh Manager, Wazuh Indexer, and Wazuh Dashboard components.
+
+The installation was initiated using:
+
+```bash
+sudo bash ./wazuh-install.sh -a
+
+
 
 ## Agent Deployment
 
