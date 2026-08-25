@@ -20,7 +20,7 @@
 - Incorporate AI into security analysis
 - Document findings and troubleshooting
 
-## 1. Wazuh Deployment
+## 1) Wazuh Deployment
 
 Wazuh was deployed on an Ubuntu Server virtual machine to serve as the centralized SIEM and security monitoring platform for the lab environment.
 
