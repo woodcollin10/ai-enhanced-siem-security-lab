@@ -20,7 +20,7 @@
 - Incorporate AI into security analysis
 - Document findings and troubleshooting
 
-## Wazuh Deployment
+## 1. Wazuh Deployment
 
 Wazuh was deployed on an Ubuntu Server virtual machine to serve as the centralized SIEM and security monitoring platform for the lab environment.
 
@@ -28,9 +28,10 @@ The Wazuh installation assistant was used to deploy the Wazuh Manager, Wazuh Ind
 
 The installation was initiated using:
 
+```bash
 sudo bash ./wazuh-install.sh -a
-
-<img width="1000" height="764" alt="Wazuh" src="https://github.com/user-attachments/assets/44c98517-00c3-4a61-931e-d93ca7efb9a4" />
+```
+<img width="800" height="564" alt="Wazuh" src="https://github.com/user-attachments/assets/44c98517-00c3-4a61-931e-d93ca7efb9a4" />
 
 ### Installation Troubleshooting
 
