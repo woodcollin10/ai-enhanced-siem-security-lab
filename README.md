@@ -116,10 +116,35 @@ The services returned an `active` status, confirming that the Wazuh Manager, Ind
 
 The Wazuh Dashboard was then accessed through a web browser, confirming that the installation was functioning correctly.
 
-## Agent Deployment
+## 2) Agent Deployment
 
-[Windows agent setup]
+The Ubuntu server was configured as the centralized Wazuh server for the lab environment. The Windows systems were then configured as Wazuh agents and pointed to the Ubuntu server so that security events and system information could be collected and monitored through the Wazuh dashboard.
 
+### Ubuntu Wazuh Server
+
+The Ubuntu server was established as the central Wazuh management server. After confirming that the Wazuh services were running, the server's IP address was used as the destination for the Windows agents.
+
+The Wazuh dashboard was accessed from the Windows environment to verify connectivity with the server and begin the agent deployment process.
+
+<img width="800" height="564" alt="desktopwazuhconf" src="https://github.com/user-attachments/assets/f78d3d3d-0c54-4dbb-b89c-650dbe3b5971" />
+
+<img width="800" height="564" alt="serverwazuh" src="https://github.com/user-attachments/assets/1fc06b14-f300-4098-a903-41aeef44b174" />
+
+<img width="800" height="564" alt="systems agents" src="https://github.com/user-attachments/assets/db1f2c8e-fdbf-49c1-8490-c1cfd1b4dbfe" />
+
+### Windows Agent Deployment
+
+From the Wazuh dashboard, the **Deploy new agent** option was selected to begin configuring the Windows endpoints.
+
+The Windows operating system and the Wazuh server information were specified during the deployment process. Wazuh then generated the installation and configuration commands required to deploy the agent.
+
+The generated PowerShell commands were copied and executed in an **Administrator PowerShell** session on each Windows machine. These commands installed the Wazuh agent and configured it to communicate with the Ubuntu Wazuh server.
+
+After installation, the Wazuh service was verified using PowerShell:
+
+```powershell
+Get-Service -Name WazuhSvc
+```
 ## Security Monitoring
 
 [Logs, alerts, dashboards]
