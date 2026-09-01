@@ -157,8 +157,6 @@ Windows Event Viewer was first used to verify that the failed authentication att
 
 The Security log was filtered for **Event ID 4625**, which represents a failed logon attempt. The Event Viewer results showed multiple instances of Event ID 4625, confirming that the authentication failures were being logged by Windows.
 
-> Note: Windows records the authentication failure and related event information, but does not record the actual password that was entered.
-
 <img width="800" height="564" alt="Event Viewer" src="https://github.com/user-attachments/assets/5fd1180d-e86b-407a-9a5b-100ea4927092" />
 
 The selected event shows:
