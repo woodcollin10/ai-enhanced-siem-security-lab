@@ -145,13 +145,83 @@ After installation, the Wazuh service was verified using PowerShell:
 ```powershell
 Get-Service -Name WazuhSvc
 ```
-## Security Monitoring
+## 3) Security Monitoring & Detection
 
-[Logs, alerts, dashboards]
+## Failed Authentication Detection
 
-## Detection & Attack Simulation
+To test the security monitoring capabilities of the Wazuh environment, a failed authentication scenario was intentionally performed on the Windows 11 machine, DESKTOP01. Multiple incorrect password attempts were made to generate Windows security events that could be collected and analyzed by Wazuh.
 
-[Test scenarios]
+### 1. Verifying the Failed Authentication Event
+
+Windows Event Viewer was first used to verify that the failed authentication attempts were successfully recorded by the operating system.
+
+The Security log was filtered for **Event ID 4625**, which represents a failed logon attempt. The Event Viewer results showed multiple instances of Event ID 4625, confirming that the authentication failures were being logged by Windows.
+
+> Note: Windows records the authentication failure and related event information, but does not record the actual password that was entered.
+
+<img width="800" height="564" alt="Event Viewer" src="https://github.com/user-attachments/assets/5fd1180d-e86b-407a-9a5b-100ea4927092" />
+
+The selected event shows:
+
+- **Log Name:** Security
+- **Event ID:** 4625
+- **Task Category:** Logon
+- **Keywords:** Audit Failure
+- **Computer:** Desktop01.woodtech.com
+- **Message:** "An account failed to log on."
+
+This confirmed that the failed authentication activity was being recorded at the Windows endpoint before investigating the event through Wazuh.
+
+### 2. Investigating the Event in Wazuh
+
+After confirming the event in Windows Event Viewer, the Wazuh dashboard was used to determine whether the Wazuh agent successfully collected and reported the activity.
+
+The **Threat Hunting → Events** section was opened for the DESKTOP01 agent. A search for **4625** was performed to locate the failed authentication events.
+
+<img width="800" height="564" alt="passauthwazuh" src="https://github.com/user-attachments/assets/ba2438d9-8690-4d88-a646-d2ff269193aa" />
+
+Wazuh identified multiple events associated with DESKTOP01. The results included:
+
+- **Agent:** DESKTOP01
+- **Agent ID:** 001
+- **Event ID:** 4625
+- **Rule ID:** 60122
+- **Rule Level:** 5
+- **Rule Description:** Logon Failure - Unknown user or bad password
+
+This demonstrated that the Windows security event was successfully collected by the Wazuh agent and processed by the Wazuh manager.
+
+### 3. Inspecting the Alert Details
+
+The magnifying glass next to an event was selected to investigate the alert in greater detail.
+
+<img width="800" height="564" alt="psswdauthmagnify" src="https://github.com/user-attachments/assets/f84fc1ef-d9b3-4a41-825c-1273504f3b9c" />
+
+The expanded event view provides additional information associated with the Windows security event. This includes information such as the affected computer, workstation name, target domain, target username, Windows Security channel, Event ID, event record ID, and the detailed Windows event message.
+
+For this event, the investigation showed:
+
+- **Workstation:** DESKTOP01
+- **Target Domain:** WOODTECH
+- **Target Username:** Administrator
+- **Windows Channel:** Security
+- **Event ID:** 4625
+- **Event Message:** "An account failed to log on."
+
+The expanded event information provides an analyst with additional context needed to investigate the authentication failure and determine whether the activity represents normal user error or potentially suspicious behavior.
+
+### Detection Result
+
+This test demonstrated the complete detection process:
+
+1. An intentional failed authentication attempt was performed on DESKTOP01.
+2. Windows generated a Security Event ID 4625.
+3. The Wazuh agent collected the event from the Windows endpoint.
+4. Wazuh processed the event using its detection rules.
+5. The event appeared in Wazuh Threat Hunting.
+6. The alert was opened and investigated using the expanded event details.
+
+This establishes the foundation for additional security monitoring and attack simulation scenarios within the lab environment.
 
 ## AI Integration
 
